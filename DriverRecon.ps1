@@ -60,7 +60,9 @@ function Invoke-DriverRecon{
             Write-Host($driverFile)
             Write-Host("`tIssuer: " + $driverCert.Issuer)
             Write-Host("`tSubject: " + $driverCert.Subject)
-            Write-Host("`tDateSigned: " + $driverCert.GetEffectiveDateString())
+            Write-Host("`tDate Signed: " + $driverCert.GetEffectiveDateString())
+            $description = Get-Item $driverFile | select -Property VersionInfo -ExpandProperty VersionInfo | select -Property FileDescription -ExpandProperty FileDescription
+            Write-Host("`tDescription: " + $description)
     
             $driverFileContent = Get-Content $driverFile -Encoding Unicode
             $iocreatedeviceMatch = [Regex]::Matches($driverFileContent,"IoCreateDevice")
@@ -78,15 +80,15 @@ function Invoke-DriverRecon{
             }
             if ($deviceLinkMatches.Count -gt 0)
             {
-                Write-Host("`tDevice Links: " + ($deviceLinkMatches -join ","));
+                Write-Host("`tPotential Device Links: " + ($deviceLinkMatches -join ","));
             }
             if ($symLinkMatches.Count -gt 0)
             {
-                Write-Host("`tSym Links: " + ($symLinkMatches -join ","));
+                Write-Host("`tPotential Sym Links: " + ($symLinkMatches -join ","));
             }
             if ($sddlMatches.Count -gt 0)
             {
-                Write-Host("`tSDs: " + ($sddlMatches -join ","))
+                Write-Host("`tPotential SDs: " + ($sddlMatches -join ","))
             }
             Write-Host("");
         }
